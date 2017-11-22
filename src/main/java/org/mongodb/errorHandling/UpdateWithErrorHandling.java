@@ -90,17 +90,15 @@ public class UpdateWithErrorHandling {
 		Thread.sleep(10000);
 
 		ObjectId oid = new ObjectId();
-		Document update_op = new Document().append("update_ops", oid);
 		Document update = new Document().append("$set",
 				new Document().append("NewField", 5)).append("$addToSet",
-				update_op);
+				new Document().append("update_ops", oid));
 		Document searchQuery = new Document().append("_id", 5).append(
 				"update_ops", new Document().append("$ne", oid));
 		try {
 			updateColl.updateOne(searchQuery, update);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.err.println(obj);
 			try {
 				System.err
 						.println("retrying *************************** query "
@@ -110,7 +108,6 @@ public class UpdateWithErrorHandling {
 				// TODO Handle appropriately
 				System.out.println(e1.toString());
 				System.out.println(e1.getMessage());
-				// you may get duplicate key exception here ignore it.
 				e1.printStackTrace();
 			}
 		}
