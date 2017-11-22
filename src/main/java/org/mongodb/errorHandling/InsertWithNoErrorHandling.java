@@ -33,7 +33,6 @@ public class InsertWithNoErrorHandling {
 
 		} catch (ParseException e) {
 			System.out.println(e.getMessage());
-			// printHelpAndExit(options);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// printHelpAndExit(options);

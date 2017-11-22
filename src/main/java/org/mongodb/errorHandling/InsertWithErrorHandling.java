@@ -73,17 +73,15 @@ public class InsertWithErrorHandling {
 					insertColl.insertOne(obj);
 					continue;
 				} catch (DuplicateKeyException e1) {
-// IGNORE, This will be thrown in case insert was successful.
+// IGNORE, This will be thrown in case original insert was successful.
 					System.out.println(e1.toString());
 					System.out.println(e1.getMessage());
-					// you may get duplicate key exception here ignore it.
 					e1.printStackTrace();
 				}
 				catch (Exception e1) {
 //TODO Handle appropriately					
 					System.out.println(e1.toString());
 					System.out.println(e1.getMessage());
-					// you may get duplicate key exception here ignore it.
 					e1.printStackTrace();
 				}
 			}
