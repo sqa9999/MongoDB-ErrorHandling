@@ -86,7 +86,8 @@ public class UpdateWithErrorHandling {
 				}
 			}
 		}
-		// Sleeping, time kill the Primary
+		// Sleeping, time to shut down the Primary
+		System.out.println("**********Sleeping, shutdown Primary*********");
 		Thread.sleep(10000);
 
 		ObjectId oid = new ObjectId();
@@ -100,8 +101,8 @@ public class UpdateWithErrorHandling {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			try {
-				System.err
-						.println("retrying *************************** query "
+				System.out
+						.println("retrying update *************************** query "
 								+ searchQuery + " updating " + update);
 				updateColl.updateOne(searchQuery, update);
 			} catch (Exception e1) {

@@ -86,7 +86,7 @@ public class UpdateWithNoErrorHandling {
 				}
 			}
 		}
-		// Sleeping, time kill the Primary
+		// Sleeping, time to shut down the Primary
 		Thread.sleep(10000);
 
 		ObjectId oid = new ObjectId();
@@ -100,7 +100,7 @@ public class UpdateWithNoErrorHandling {
 		} catch (Exception e) {
 			// NO Exception Handling
 			System.err
-			.println("failed *************************** query "
+			.println("*************************** error on update for query "
 					+ searchQuery + " updating " + update);
 		}
 

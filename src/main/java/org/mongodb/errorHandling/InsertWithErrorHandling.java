@@ -67,9 +67,7 @@ public class InsertWithErrorHandling {
 				System.err.println(obj);
 				// e.printStackTrace();
 				try {
-//					Thread.sleep(2000);
-					System.err.println("retrying *************************** " + obj);
-					insertColl.insertOne(obj);
+					System.out.println("retrying insert*************************** " + obj);
 					insertColl.insertOne(obj);
 					continue;
 				} catch (DuplicateKeyException e1) {
