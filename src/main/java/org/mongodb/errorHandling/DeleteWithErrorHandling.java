@@ -15,6 +15,7 @@ import org.bson.types.ObjectId;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.MongoSocketException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -98,7 +99,7 @@ public class DeleteWithErrorHandling {
 				"ts", new Document().append("$lte", ts));
 		try {
 			deleteColl.deleteMany(searchQuery);
-		} catch (Exception e) {
+		} catch (MongoSocketException e) {
 			try {
 				System.out
 						.println("retrying delete for *************************** query "

@@ -1,5 +1,6 @@
 package org.mongodb.errorHandling;
 
+import java.net.ConnectException;
 import java.net.UnknownHostException;
 
 import org.apache.commons.cli.CommandLine;
@@ -13,6 +14,7 @@ import org.bson.Document;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.MongoSocketException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -62,7 +64,7 @@ public class InsertWithErrorHandling {
 				if(i%10==0)
 					System.out.println(obj);
 				insertColl.insertOne(obj);
-			} catch (Exception e) {
+			} catch (MongoSocketException e) {
 				// TODO Auto-generated catch block
 				System.err.println(obj);
 				// e.printStackTrace();

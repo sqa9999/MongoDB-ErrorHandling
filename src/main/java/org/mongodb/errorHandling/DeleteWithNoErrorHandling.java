@@ -44,67 +44,76 @@ public class DeleteWithNoErrorHandling {
 		return line;
 	}
 
-	public static void main(String[] args) throws Exception {
-		CommandLine line = initializeAndParseCommandLineOptions(args);
-		String uri = line.getOptionValue("c");
-		System.out.println(uri);
-		MongoDatabase db = null;
+	public static void main(String[] args) {
+		try {
+			CommandLine line = initializeAndParseCommandLineOptions(args);
+			String uri = line.getOptionValue("c");
+			System.out.println(uri);
+			MongoDatabase db = null;
 
-		MongoClient client = new MongoClient(new MongoClientURI(uri));
-		db = client.getDatabase("test");
+			MongoClient client = new MongoClient(new MongoClientURI(uri));
 
-		MongoCollection<Document> deleteColl = db.getCollection("deleteColl");
-		deleteColl.drop();
+			db = client.getDatabase("test");
 
-		Document obj = null;
-		// insert few documents
-		for (int i = 0; i < 100; i++) {
-			try {
-				obj = new Document();
-				obj.put("i", i % 10);
-				obj.append("ts", Calendar.getInstance().getTime());
-				deleteColl.insertOne(obj);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				System.err.println(obj);
+			MongoCollection<Document> deleteColl = db
+					.getCollection("deleteColl");
+			deleteColl.drop();
+
+			Document obj = null;
+			// insert few documents
+			for (int i = 0; i < 100; i++) {
 				try {
-					System.err.println("retrying *************************** "
-							+ obj);
+					obj = new Document();
+					obj.put("i", i % 10);
+					obj.append("ts", Calendar.getInstance().getTime());
 					deleteColl.insertOne(obj);
-					continue;
-				} catch (DuplicateKeyException e1) {
-					// IGNORE, This will be thrown in case insert was
-					// successful.
-					System.out.println(e1.toString());
-					System.out.println(e1.getMessage());
-					// you may get duplicate key exception here ignore it.
-					e1.printStackTrace();
-				} catch (Exception e1) {
-					// TODO Handle appropriately
-					System.out.println(e1.toString());
-					System.out.println(e1.getMessage());
-					// you may get duplicate key exception here ignore it.
-					e1.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					System.err.println(obj);
+					try {
+						System.err
+								.println("retrying *************************** "
+										+ obj);
+						deleteColl.insertOne(obj);
+						continue;
+					} catch (DuplicateKeyException e1) {
+						// IGNORE, This will be thrown in case insert was
+						// successful.
+						System.out.println(e1.toString());
+						System.out.println(e1.getMessage());
+						// you may get duplicate key exception here ignore it.
+						e1.printStackTrace();
+					} catch (Exception e1) {
+						// TODO Handle appropriately
+						System.out.println(e1.toString());
+						System.out.println(e1.getMessage());
+						// you may get duplicate key exception here ignore it.
+						e1.printStackTrace();
+					}
 				}
 			}
-		}
-		// Sleeping, time to shut down the Primary
-		System.out.println("**********Sleeping, shutdown Primary*********");
-		Thread.sleep(10000);
+			// Sleeping, time to shut down the Primary
+			System.out.println("**********Sleeping, shutdown Primary*********");
+			Thread.sleep(10000);
 
-		ObjectId oid = new ObjectId();
-		Date ts = Calendar.getInstance().getTime();
-		Document searchQuery = new Document().append("i", 5).append("ts",
-				new Document().append("$lte", ts));
-		try {
-			deleteColl.deleteMany(searchQuery);
+			ObjectId oid = new ObjectId();
+			Date ts = Calendar.getInstance().getTime();
+			Document searchQuery = new Document().append("i", 5).append("ts",
+					new Document().append("$lte", ts));
+			try {
+				deleteColl.deleteMany(searchQuery);
+			} catch (Exception e) {
+				// NO Exception Handling
+				System.err
+						.println("Error on delete for *************************** query "
+								+ searchQuery);
+			}
+
+			client.close();
 		} catch (Exception e) {
-			// NO Exception Handling
-			System.err
-					.println("Error on delete for *************************** query "
-							+ searchQuery);
-		}
+			System.out.println(e.toString());
+			System.out.println(e.getMessage());
 
-		client.close();
+		}
 	}
 }

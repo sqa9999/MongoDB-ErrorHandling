@@ -1,7 +1,5 @@
 package org.mongodb.errorHandling;
 
-import java.net.UnknownHostException;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -14,6 +12,7 @@ import org.bson.types.ObjectId;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.MongoSocketException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -98,7 +97,7 @@ public class UpdateWithErrorHandling {
 				"update_ops", new Document().append("$ne", oid));
 		try {
 			updateColl.updateOne(searchQuery, update);
-		} catch (Exception e) {
+		} catch (MongoSocketException e) {
 			// TODO Auto-generated catch block
 			try {
 				System.out
