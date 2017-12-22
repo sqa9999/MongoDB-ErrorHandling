@@ -19,7 +19,7 @@ This repository contains sample code for different MongoDB operations with excep
 
     Following code is hard coded to connect to localhost at ports 27017, 27018 and 27019 with user admin and password admin. For testing chnage the apssword to admin1 while the code is executing.
 
-    `java -cp ExceptionHandling.jar org.mongodb.errorHandling.InsertWithPasswordChangeHandling.java' 
+    `java -cp ExceptionHandling.jar org.mongodb.errorHandling.InsertWithPasswordChangeHandling.java` 
 
 
 # Build
