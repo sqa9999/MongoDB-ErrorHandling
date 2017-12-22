@@ -10,15 +10,13 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.bson.Document;
 
-import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoSecurityException;
-import com.mongodb.MongoSocketException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-public class InsertWithErrorHandling {
+public class InsertWithPasswordChangeHandling {
 
 	@SuppressWarnings("static-access")
 	private static CommandLine initializeAndParseCommandLineOptions(
@@ -45,13 +43,13 @@ public class InsertWithErrorHandling {
 	}
 
 	public static void main(String[] args) throws UnknownHostException {
-		CommandLine line = initializeAndParseCommandLineOptions(args);
-		String uri = line.getOptionValue("c");
-		System.out.println(uri);
-		MongoDatabase db = null;
+//		CommandLine line = initializeAndParseCommandLineOptions(args);
+//		String uri = line.getOptionValue("c");
+//		System.out.println(uri);
+//		MongoDatabase db = null;
 
 		MongoClient client = new MongoClient(new MongoClientURI("mongodb://admin:admin@localhost:27017,localhost:27018,localhost:27019/?maxIdleTimeMS=1000"));
-		db = client.getDatabase("test");
+		MongoDatabase db = client.getDatabase("test");
 
 		MongoCollection<Document> insertColl = db.getCollection("insertColl");
 		insertColl.drop();
@@ -64,25 +62,19 @@ public class InsertWithErrorHandling {
 				if(i%10==0)
 					System.out.println(obj);
 				insertColl.insertOne(obj);
-			} catch (MongoSocketException e) {
-				// TODO Auto-generated catch block
-				System.err.println(obj);
-				// e.printStackTrace();
-				try {
-					System.out.println("retrying insert*************************** " + obj);
-					insertColl.insertOne(obj);
-					continue;
-				} catch (DuplicateKeyException e1) {
-// IGNORE, This will be thrown in case original insert was successful.
-					System.out.println(e1.toString());
-					System.out.println(e1.getMessage());
-					e1.printStackTrace();
-				}catch (Exception e1) {
-//TODO Handle appropriately					
-					System.out.println(e1.toString());
-					System.out.println(e1.getMessage());
-					e1.printStackTrace();
-				}
+			} catch (MongoSecurityException e1){
+				//TODO Handle appropriately					
+				System.out.println(e1.toString());
+				System.out.println(e1.getMessage());
+				e1.printStackTrace();
+
+				client = new MongoClient(new MongoClientURI("mongodb://admin:admin1@localhost:27017,localhost:27018,localhost:27019/?maxIdleTimeMS=1000"));
+				db = client.getDatabase("test");
+
+				insertColl = db.getCollection("insertColl");
+
+				insertColl.insertOne(obj);
+				
 			}catch (Exception e1){
 				//TODO Handle appropriately					
 
