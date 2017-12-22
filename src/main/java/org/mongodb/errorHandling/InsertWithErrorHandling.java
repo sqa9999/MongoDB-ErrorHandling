@@ -13,7 +13,6 @@ import org.bson.Document;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.mongodb.MongoSecurityException;
 import com.mongodb.MongoSocketException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -50,7 +49,7 @@ public class InsertWithErrorHandling {
 		System.out.println(uri);
 		MongoDatabase db = null;
 
-		MongoClient client = new MongoClient(new MongoClientURI("mongodb://admin:admin@localhost:27017,localhost:27018,localhost:27019/?maxIdleTimeMS=1000"));
+		MongoClient client = new MongoClient(new MongoClientURI(uri));
 		db = client.getDatabase("test");
 
 		MongoCollection<Document> insertColl = db.getCollection("insertColl");
