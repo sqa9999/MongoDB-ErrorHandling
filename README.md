@@ -1,5 +1,5 @@
 # MongoDB Error Hanling
-This repository contains sample code for different mongoDb operations.
+This repository contains sample code for different MongoDB operations with exception handling.
 
 # Running
 * .jar is included in the bin directory, or build the jar using `mvn package`
